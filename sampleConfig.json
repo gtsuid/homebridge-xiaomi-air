@@ -1,0 +1,78 @@
+{
+    "bridge": {
+        "name": "HomeBridge",
+        "username": "0E:69:69:38:A6:E9",
+        "port": 51658,
+        "pin": "034-25-569",
+        "advertiser": "avahi"
+    },
+    "platforms": [
+        {
+            "platform": "XiaomiAirPlatform",
+            "deviceCfgs": [
+                {
+                    "type": "MiAirPurifier2S",
+                    "ip": "192.168.1.169",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 2s",
+                    "airPurifierDisable": false,
+                    "silentModeSwitchDisable": true,
+                    "silentModeSwitchName": "Silent Mode",
+                    "temperatureDisable": true,
+                    "temperatureName": "Temperature",
+                    "humidityDisable": false,
+                    "humidityName": "Humidity",
+                    "buzzerSwitchDisable": true,
+                    "buzzerSwitchName": "Buzzer",
+                    "ledBulbDisable": true,
+                    "ledBulbName": "LED",
+                    "airQualityDisable": false,
+                    "airQualityName": "Air Quality",
+                    "firmwareRevision": "1.4.3"
+                },
+                {
+                    "type": "XiaomiAirPurifier4",
+                    "ip": "192.168.1.104",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 4",
+                    "silentModeSwitchName": "Purifier 4 Sleep",
+                    "airQualityName": "Purifier 4 Air Quality",
+                    "firmwareRevision": "1.4.3"
+                },
+                {
+                    "type": "XiaomiAirPurifier4Lite",
+                    "ip": "192.168.1.114",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 4 Lite",
+                    "silentModeSwitchName": "Purifier 4 Lite Sleep",
+                    "airQualityName": "Purifier 4 Lite Air Quality",
+                    "firmwareRevision": "1.4.3"
+                },
+                {
+                    "type": "XiaomiAirPurifier4Pro",
+                    "ip": "192.168.1.124",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 4 Pro",
+                    "silentModeSwitchName": "Purifier 4 Pro Sleep",
+                    "airQualityName": "Purifier 4 Pro Air Quality",
+                    "firmwareRevision": ""
+                },
+                {
+                    "type": "XiaomiAirPurifier4Compact",
+                    "ip": "192.168.1.134",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 4 Compact",
+                    "silentModeSwitchName": "Purifier 4 Compact Sleep",
+                    "airQualityName": "Purifier 4 Compact Air Quality",
+                    "firmwareRevision": "1.4.3"
+                },
+                {
+                    "type": "XiaomiDehumidifierLite",
+                    "ip": "192.168.1.110",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "dehumidifierName": "Dehumidifier"
+                }
+            ]
+        }
+    ]
+}

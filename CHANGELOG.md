@@ -1,0 +1,11 @@
+# Changelog
+
+## 0.0.1
+- Update miio to 0.15.6.
+- Add native Homebridge UI settings
+- Consolidate shared code of original Xiaomi Air Purifier and 2 series
+- Add Xiaomi Air Purifier 3, 3H, and 3C support
+- Add Xiaomi Air Purifier 4, 4 Lite, 4 Pro, and 4 Compact support
+- Add Xiaomi Air Purifier 6 support
+- Add Xiaomi Smart Dehumidifier Lite support
+- Add per-device `firmwareRevision`
