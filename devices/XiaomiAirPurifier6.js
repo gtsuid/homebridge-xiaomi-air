@@ -33,7 +33,7 @@ class XiaomiAirPurifier6 extends Base {
             accessories.push({
                 name,
                 uuid_base: `${config.ip}:${key}`,
-                getServices: () => [this.information(config.serialNumber || config.ip), ...services()]
+                getServices: () => [this.information(this.serialNumber), ...services()]
             });
         };
         if (!config.airPurifierDisable) {

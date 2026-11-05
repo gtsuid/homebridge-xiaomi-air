@@ -3,7 +3,7 @@
   "pluginType": "platform",
   "singular": true,
   "strictValidation": false,
-  "headerDisplay": "Add your air devices below. Each device needs its local address and miio token. Optional accessories appear in Apple Home when given a name.",
+  "headerDisplay": "Add a device, then choose its model. Supports Xiaomi air purifiers and dehumidifier. Each device needs its local address and miio token.",
   "footerDisplay": "Save your settings and restart Homebridge to apply changes.",
   "schema": {
     "type": "object",
@@ -179,8 +179,7 @@
             "airPurifierName": {
               "title": "Purifier name",
               "type": "string",
-              "description": "Name in Apple Home. Required for the original, 2, 2S, and Pro when the purifier accessory is enabled.",
-              "default": "Air Purifier",
+              "description": "Name in Apple Home. Leave blank to use the device family name.",
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"MiAirPurifier6\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -188,7 +187,6 @@
             "airPurifierDisable": {
               "title": "Hide purifier accessory",
               "type": "boolean",
-              "default": false,
               "description": "Keep only the other named accessories for this device.",
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"MiAirPurifier6\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\"].indexOf(d.type) !== -1 && (true);"
@@ -197,17 +195,18 @@
             "silentModeSwitchName": {
               "title": "Sleep switch name",
               "type": "string",
-              "description": "Leave blank to omit Sleep on modern devices. Original, 2, 2S, and Pro require a name when the purifier is enabled, even if this switch is hidden."
+              "description": "Leave blank to omit the Sleep switch.",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && !!d.type && d.silentModeSwitchDisable !== true;"
+              }
             },
             "silentModeSwitchDisable": {
               "title": "Hide Sleep switch",
-              "type": "boolean",
-              "default": false
+              "type": "boolean"
             },
             "temperatureDisable": {
               "title": "Hide temperature accessory",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -223,7 +222,6 @@
             "humidityDisable": {
               "title": "Hide humidity accessory",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -239,7 +237,6 @@
             "airQualityDisable": {
               "title": "Hide air quality accessory",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -255,7 +252,6 @@
             "buzzerSwitchDisable": {
               "title": "Hide buzzer accessory",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -271,7 +267,6 @@
             "ledBulbDisable": {
               "title": "Hide screen / led accessory",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -287,7 +282,6 @@
             "ionizerSwitchDisable": {
               "title": "Hide ionizer accessory",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier4\", \"MiAirPurifier4\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -303,7 +297,6 @@
             "uvSwitchDisable": {
               "title": "Hide uv accessory",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier6\", \"MiAirPurifier6\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -325,10 +318,7 @@
             "serialNumber": {
               "title": "Serial number",
               "type": "string",
-              "description": "Optional serial number shown in Apple Home. Leave blank to use the device address.",
-              "condition": {
-                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
-              }
+              "description": "Optional serial number shown in Apple Home. Leave blank to use the device address."
             },
             "model": {
               "title": "Expected LAN model ID",
@@ -360,8 +350,7 @@
             "dehumidifierName": {
               "title": "Dehumidifier name",
               "type": "string",
-              "default": "Dehumidifier",
-              "description": "Name of the dehumidifier in Apple Home.",
+              "description": "Name in Apple Home. Leave blank to use Xiaomi Smart Dehumidifier Lite.",
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -369,7 +358,6 @@
             "dehumidifierDisable": {
               "title": "Hide dehumidifier accessory",
               "type": "boolean",
-              "default": false,
               "description": "Keep only the other named accessories for this device.",
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
@@ -378,7 +366,6 @@
             "clothesDryingSwitchDisable": {
               "title": "Hide clothes drying",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -394,7 +381,6 @@
             "waterTankFullSensorDisable": {
               "title": "Hide tank full sensor",
               "type": "boolean",
-              "default": false,
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
               }
@@ -407,66 +393,7 @@
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.waterTankFullSensorDisable !== true);"
               }
             }
-          },
-          "allOf": [
-            {
-              "anyOf": [
-                {
-                  "properties": {
-                    "type": {
-                      "enum": [
-                        "XiaomiAirPurifier4",
-                        "XiaomiAirPurifier4Lite",
-                        "XiaomiAirPurifier4Pro",
-                        "XiaomiAirPurifier4Compact",
-                        "MiAirPurifier4",
-                        "MiAirPurifier4Lite",
-                        "MiAirPurifier4Pro",
-                        "MiAirPurifier4Compact",
-                        "XiaomiAirPurifier6",
-                        "MiAirPurifier6",
-                        "XiaomiAirPurifier3",
-                        "XiaomiAirPurifier3H",
-                        "XiaomiAirPurifier3C",
-                        "MiAirPurifier3",
-                        "MiAirPurifier3H",
-                        "MiAirPurifier3C",
-                        "XiaomiDehumidifierLite"
-                      ]
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "airPurifierDisable"
-                  ],
-                  "properties": {
-                    "airPurifierDisable": {
-                      "enum": [
-                        true
-                      ]
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "airPurifierName",
-                    "silentModeSwitchName"
-                  ],
-                  "properties": {
-                    "airPurifierName": {
-                      "type": "string",
-                      "pattern": "\\S"
-                    },
-                    "silentModeSwitchName": {
-                      "type": "string",
-                      "pattern": "\\S"
-                    }
-                  }
-                }
-              ]
-            }
-          ]
+          }
         }
       }
     }
@@ -476,7 +403,7 @@
     {
       "key": "deviceCfgs",
       "type": "tabarray",
-      "title": "{{ value.type === 'XiaomiDehumidifierLite' ? (value.dehumidifierName || 'Dehumidifier') : (value.airPurifierName || 'New purifier') }}",
+      "title": "{{ value.type === 'XiaomiDehumidifierLite' ? (value.dehumidifierName || 'Dehumidifier') : (value.type ? (value.airPurifierName || 'Air purifier') : 'Device') }}",
       "expandable": true,
       "expanded": true,
       "draggable": true,
@@ -488,10 +415,30 @@
           "key": "deviceCfgs[].token",
           "type": "password"
         },
-        "deviceCfgs[].airPurifierName",
-        "deviceCfgs[].airPurifierDisable",
-        "deviceCfgs[].dehumidifierName",
-        "deviceCfgs[].dehumidifierDisable",
+        {
+          "key": "deviceCfgs[].airPurifierName",
+          "condition": {
+            "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"MiAirPurifier6\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\"].indexOf(d.type) !== -1 && (true);"
+          }
+        },
+        {
+          "key": "deviceCfgs[].airPurifierDisable",
+          "condition": {
+            "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"MiAirPurifier6\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\"].indexOf(d.type) !== -1 && (true);"
+          }
+        },
+        {
+          "key": "deviceCfgs[].dehumidifierName",
+          "condition": {
+            "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+          }
+        },
+        {
+          "key": "deviceCfgs[].dehumidifierDisable",
+          "condition": {
+            "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+          }
+        },
         {
           "key": "deviceCfgs[]",
           "type": "section",
@@ -500,9 +447,24 @@
           "expanded": false,
           "items": [
             "deviceCfgs[].silentModeSwitchDisable",
-            "deviceCfgs[].silentModeSwitchName",
-            "deviceCfgs[].clothesDryingSwitchDisable",
-            "deviceCfgs[].clothesDryingSwitchName"
+            {
+              "key": "deviceCfgs[].silentModeSwitchName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && !!d.type && d.silentModeSwitchDisable !== true;"
+              }
+            },
+            {
+              "key": "deviceCfgs[].clothesDryingSwitchDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].clothesDryingSwitchName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.clothesDryingSwitchDisable !== true);"
+              }
+            }
           ]
         },
         {
@@ -512,14 +474,54 @@
           "expandable": true,
           "expanded": false,
           "items": [
-            "deviceCfgs[].airQualityDisable",
-            "deviceCfgs[].airQualityName",
-            "deviceCfgs[].temperatureDisable",
-            "deviceCfgs[].temperatureName",
-            "deviceCfgs[].humidityDisable",
-            "deviceCfgs[].humidityName",
-            "deviceCfgs[].waterTankFullSensorDisable",
-            "deviceCfgs[].waterTankFullSensorName"
+            {
+              "key": "deviceCfgs[].airQualityDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].airQualityName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\"].indexOf(d.type) !== -1 && (d.airQualityDisable !== true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].temperatureDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].temperatureName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.temperatureDisable !== true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].humidityDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].humidityName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.humidityDisable !== true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].waterTankFullSensorDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].waterTankFullSensorName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.waterTankFullSensorDisable !== true);"
+              }
+            }
           ]
         },
         {
@@ -529,10 +531,30 @@
           "expandable": true,
           "expanded": false,
           "items": [
-            "deviceCfgs[].ledBulbDisable",
-            "deviceCfgs[].ledBulbName",
-            "deviceCfgs[].buzzerSwitchDisable",
-            "deviceCfgs[].buzzerSwitchName"
+            {
+              "key": "deviceCfgs[].ledBulbDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].ledBulbName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.ledBulbDisable !== true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].buzzerSwitchDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].buzzerSwitchName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"MiAirPurifier\", \"MiAirPurifier2\", \"MiAirPurifier2S\", \"MiAirPurifierPro\", \"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.buzzerSwitchDisable !== true);"
+              }
+            }
           ]
         },
         {
@@ -542,10 +564,30 @@
           "expandable": true,
           "expanded": false,
           "items": [
-            "deviceCfgs[].ionizerSwitchDisable",
-            "deviceCfgs[].ionizerSwitchName",
-            "deviceCfgs[].uvSwitchDisable",
-            "deviceCfgs[].uvSwitchName"
+            {
+              "key": "deviceCfgs[].ionizerSwitchDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier4\", \"MiAirPurifier4\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].ionizerSwitchName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier4\", \"MiAirPurifier4\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\"].indexOf(d.type) !== -1 && (d.ionizerSwitchDisable !== true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].uvSwitchDisable",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier6\", \"MiAirPurifier6\"].indexOf(d.type) !== -1 && (true);"
+              }
+            },
+            {
+              "key": "deviceCfgs[].uvSwitchName",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier6\", \"MiAirPurifier6\"].indexOf(d.type) !== -1 && (d.uvSwitchDisable !== true);"
+              }
+            }
           ],
           "condition": {
             "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier4\", \"MiAirPurifier4\", \"XiaomiAirPurifier4Pro\", \"MiAirPurifier4Pro\", \"XiaomiAirPurifier6\", \"MiAirPurifier6\"].indexOf(d.type) !== -1 && (true);"
@@ -559,8 +601,15 @@
           "expanded": false,
           "items": [
             "deviceCfgs[].firmwareRevision",
-            "deviceCfgs[].serialNumber",
-            "deviceCfgs[].model"
+            {
+              "key": "deviceCfgs[].serialNumber"
+            },
+            {
+              "key": "deviceCfgs[].model",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiAirPurifier4\", \"XiaomiAirPurifier4Lite\", \"XiaomiAirPurifier4Pro\", \"XiaomiAirPurifier4Compact\", \"MiAirPurifier4\", \"MiAirPurifier4Lite\", \"MiAirPurifier4Pro\", \"MiAirPurifier4Compact\", \"XiaomiAirPurifier3\", \"XiaomiAirPurifier3H\", \"XiaomiAirPurifier3C\", \"MiAirPurifier3\", \"MiAirPurifier3H\", \"MiAirPurifier3C\", \"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (true);"
+              }
+            }
           ]
         }
       ]

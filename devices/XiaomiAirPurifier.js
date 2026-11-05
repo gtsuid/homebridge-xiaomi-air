@@ -58,7 +58,7 @@ var XiaomiAirPurifier = function(platform, config, variant = 'original') {
     
 
     this.accessories = {};
-    if(!this.config['airPurifierDisable'] && this.config['airPurifierName'] && this.config['airPurifierName'] != "" && this.config['silentModeSwitchName'] && this.config['silentModeSwitchName'] != "") {
+    if(!this.config['airPurifierDisable']) {
         this.accessories['airPurifierAccessory'] = new XiaomiAirPurifierAirPurifierAccessory(this);
     }
     if(this.profile.environment && !this.config['temperatureDisable'] && this.config['temperatureName'] && this.config['temperatureName'] != "") {
@@ -88,7 +88,8 @@ var XiaomiAirPurifierAirPurifierAccessory = function(dThis) {
     this.device = dThis.device;
     this.profile = dThis.profile;
     this.firmwareRevision = dThis.firmwareRevision;
-    this.name = dThis.config['airPurifierName'];
+    this.serialNumber = dThis.serialNumber;
+    this.name = dThis.config['airPurifierName'] || 'Xiaomi ' + this.profile.model.replace('AirPurifier', 'Air Purifier ').trim();
     this.silentModeSwitchDisable = dThis.config['silentModeSwitchDisable'];
     this.silentModeSwitchName = dThis.config['silentModeSwitchName'];
     this.platform = dThis.platform;
@@ -102,13 +103,13 @@ XiaomiAirPurifierAirPurifierAccessory.prototype.getServices = function() {
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
         .setCharacteristic(Characteristic.Model, this.profile.model)
-        .setCharacteristic(Characteristic.SerialNumber, "Undefined")
+        .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
         .setCharacteristic(Characteristic.FirmwareRevision, this.firmwareRevision);
     services.push(infoService);
 
-    var silentModeSwitch = new Service.Switch(this.silentModeSwitchName);
+    var silentModeSwitch = new Service.Switch(this.silentModeSwitchName || 'Sleep Mode');
     var silentModeOnCharacteristic = silentModeSwitch.getCharacteristic(Characteristic.On);
-    if(!this.silentModeSwitchDisable) {
+    if(this.silentModeSwitchName && !this.silentModeSwitchDisable) {
         services.push(silentModeSwitch);
     }
     
@@ -429,6 +430,7 @@ var XiaomiAirPurifierTemperatureAccessory = function(dThis) {
     this.device = dThis.device;
     this.profile = dThis.profile;
     this.firmwareRevision = dThis.firmwareRevision;
+    this.serialNumber = dThis.serialNumber;
     this.name = dThis.config['temperatureName'];
     this.platform = dThis.platform;
 }
@@ -440,7 +442,7 @@ XiaomiAirPurifierTemperatureAccessory.prototype.getServices = function() {
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
         .setCharacteristic(Characteristic.Model, this.profile.model)
-        .setCharacteristic(Characteristic.SerialNumber, "Undefined")
+        .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
         .setCharacteristic(Characteristic.FirmwareRevision, this.firmwareRevision);
     services.push(infoService);
     
@@ -468,6 +470,7 @@ var XiaomiAirPurifierHumidityAccessory = function(dThis) {
     this.device = dThis.device;
     this.profile = dThis.profile;
     this.firmwareRevision = dThis.firmwareRevision;
+    this.serialNumber = dThis.serialNumber;
     this.name = dThis.config['humidityName'];
     this.platform = dThis.platform;
 }
@@ -479,7 +482,7 @@ XiaomiAirPurifierHumidityAccessory.prototype.getServices = function() {
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
         .setCharacteristic(Characteristic.Model, this.profile.model)
-        .setCharacteristic(Characteristic.SerialNumber, "Undefined")
+        .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
         .setCharacteristic(Characteristic.FirmwareRevision, this.firmwareRevision);
     services.push(infoService);
     
@@ -508,6 +511,7 @@ var XiaomiAirPurifierBuzzerSwitchAccessory = function(dThis) {
     this.device = dThis.device;
     this.profile = dThis.profile;
     this.firmwareRevision = dThis.firmwareRevision;
+    this.serialNumber = dThis.serialNumber;
     this.name = dThis.config['buzzerSwitchName'];
     this.platform = dThis.platform;
 }
@@ -519,7 +523,7 @@ XiaomiAirPurifierBuzzerSwitchAccessory.prototype.getServices = function() {
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
         .setCharacteristic(Characteristic.Model, this.profile.model)
-        .setCharacteristic(Characteristic.SerialNumber, "Undefined")
+        .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
         .setCharacteristic(Characteristic.FirmwareRevision, this.firmwareRevision);
     services.push(infoService);
     
@@ -564,6 +568,7 @@ var XiaomiAirPurifierLEDBulbAccessory = function(dThis) {
     this.device = dThis.device;
     this.profile = dThis.profile;
     this.firmwareRevision = dThis.firmwareRevision;
+    this.serialNumber = dThis.serialNumber;
     this.name = dThis.config['ledBulbName'];
     this.platform = dThis.platform;
 }
@@ -576,7 +581,7 @@ XiaomiAirPurifierLEDBulbAccessory.prototype.getServices = function() {
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
         .setCharacteristic(Characteristic.Model, this.profile.model)
-        .setCharacteristic(Characteristic.SerialNumber, "Undefined")
+        .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
         .setCharacteristic(Characteristic.FirmwareRevision, this.firmwareRevision);
     services.push(infoService);
     
@@ -616,6 +621,7 @@ var XiaomiAirPurifierAirQualityAccessory = function(dThis) {
     this.device = dThis.device;
     this.profile = dThis.profile;
     this.firmwareRevision = dThis.firmwareRevision;
+    this.serialNumber = dThis.serialNumber;
     this.name = dThis.config['airQualityName'];
     this.platform = dThis.platform;
 }
@@ -628,7 +634,7 @@ XiaomiAirPurifierAirQualityAccessory.prototype.getServices = function() {
     infoService
         .setCharacteristic(Characteristic.Manufacturer, "XiaoMi")
         .setCharacteristic(Characteristic.Model, this.profile.model)
-        .setCharacteristic(Characteristic.SerialNumber, "Undefined")
+        .setCharacteristic(Characteristic.SerialNumber, this.serialNumber)
         .setCharacteristic(Characteristic.FirmwareRevision, this.firmwareRevision);
     services.push(infoService);
     

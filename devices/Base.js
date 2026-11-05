@@ -20,7 +20,8 @@ class MiioDevice {
         }
         if (!this.connection) {
             this.connection = miio.device(this.options).then(device => {
-                device.once('thing:destroyed', () => {
+                // miio uses abstract-things events, which provide on() but not once().
+                device.on('thing:destroyed', () => {
                     this.connection = null;
                 });
                 return device;
@@ -64,6 +65,8 @@ var Base = function() {
 Base.prototype.init = function(platform, config) {
     this.platform = platform;
     this.config = config;
+    this.serialNumber = typeof config.serialNumber === 'string' && config.serialNumber.trim()
+        ? config.serialNumber.trim() : config.ip;
     const revision = config.firmwareRevision;
     this.firmwareRevision = typeof revision === 'string' && revision.trim()
         ? revision.trim()

@@ -68,7 +68,7 @@ class XiaomiDehumidifierLite extends Base {
         return new this.Service.AccessoryInformation()
             .setCharacteristic(this.C.Manufacturer, 'Xiaomi')
             .setCharacteristic(this.C.Model, MODEL)
-            .setCharacteristic(this.C.SerialNumber, this.config.serialNumber || this.config.ip)
+            .setCharacteristic(this.C.SerialNumber, this.serialNumber)
             .setCharacteristic(this.C.FirmwareRevision, this.firmwareRevision);
     }
 
