@@ -1,7 +1,7 @@
 const Base = require('./Base');
 
 const MODES = { AUTO: 0, SLEEP: 1, FAVORITE: 2, FAN: 3 };
-const WRITABLE = new Set(['power', 'mode', 'favoriteLevel', 'favoriteRpm', 'buzzer', 'childLock', 'brightness', 'anion']);
+const WRITABLE = new Set(['power', 'mode', 'favoriteLevel', 'favoriteRpm', 'buzzer', 'childLock', 'brightness', 'anion', 'uv', 'screen']);
 
 class Miot extends Base {
     constructor(platform, config, definition) {
@@ -15,6 +15,7 @@ class Miot extends Base {
         this.profiles = profiles;
         this.displayName = name;
         this.features = features;
+        this.modes = definition.modes || MODES;
         this.name = config.airPurifierName || name;
         this.Service = platform.Service;
         this.C = platform.Characteristic;
@@ -44,8 +45,11 @@ class Miot extends Base {
                 const service = new this.Service.AirQualitySensor(config.airQualityName);
                 service.getCharacteristic(this.C.PM2_5Density).onGet(() => this.read('pm25'));
                 service.getCharacteristic(this.C.AirQuality).onGet(async () => {
-                    const pm25 = await this.read('pm25');
                     const quality = this.C.AirQuality;
+                    if (features.airQuality) {
+                        return [quality.EXCELLENT, quality.GOOD, quality.FAIR, quality.INFERIOR, quality.POOR, quality.POOR][await this.read('airQuality')];
+                    }
+                    const pm25 = await this.read('pm25');
                     return pm25 <= 50 ? quality.EXCELLENT : pm25 <= 100 ? quality.GOOD :
                         pm25 <= 200 ? quality.FAIR : pm25 <= 300 ? quality.INFERIOR : quality.POOR;
                 });
@@ -57,6 +61,9 @@ class Miot extends Base {
         }
         if (features.ionizer && !config.ionizerSwitchDisable && config.ionizerSwitchName) {
             add('anion', config.ionizerSwitchName, () => [this.switchService(config.ionizerSwitchName, 'anion')]);
+        }
+        if (features.uv && !config.uvSwitchDisable && config.uvSwitchName) {
+            add('uv', config.uvSwitchName, () => [this.switchService(config.uvSwitchName, 'uv')]);
         }
         if (!config.ledBulbDisable && config.ledBulbName) {
             add('screen', config.ledBulbName, () => [this.screenService()]);
@@ -94,6 +101,9 @@ class Miot extends Base {
             (!Number.isFinite(item.value) || (!fractional && !Number.isInteger(item.value)) || item.value < min || item.value > max))) {
             throw new Error(`${this.displayName} property ${key} unavailable`);
         }
+        if (key === 'mode' && !Object.values(this.modes).includes(item.value)) {
+            throw new Error(`Unknown ${this.displayName} mode: ${item.value}`);
+        }
         return item.value;
     }
 
@@ -105,7 +115,7 @@ class Miot extends Base {
         // Fan mode can be read, but the HomeKit Manual selector writes Favorite.
         if (typeof value !== type || (type === 'number' &&
             (!Number.isInteger(value) || value < min || value > max)) ||
-            (key === 'mode' && ![MODES.AUTO, MODES.SLEEP, MODES.FAVORITE].includes(value))) {
+            (key === 'mode' && ![this.modes.AUTO, this.modes.SLEEP, this.modes.FAVORITE].includes(value))) {
             throw new Error(`Invalid ${this.displayName} value for ${key}`);
         }
         const response = await this.device.call('set_properties', [{ did: key, siid, piid, value }]);
@@ -123,6 +133,21 @@ class Miot extends Base {
 
     screenService() {
         const service = new this.Service.Lightbulb(this.config.ledBulbName);
+        if (this.features.screenPower) {
+            // Screen power is independent of the model's Dim/Mid/Normal levels.
+            const levels = this.features.brightnessLevels || [0, 1];
+            service.getCharacteristic(this.C.On)
+                .onGet(() => this.read('screen')).onSet(value => this.write('screen', value));
+            service.getCharacteristic(this.C.Brightness)
+                .onGet(async () => {
+                    const index = levels.indexOf(await this.read('brightness'));
+                    if (index < 0) throw new Error(`${this.displayName} brightness unavailable`);
+                    return Math.round((index + 1) * 100 / levels.length);
+                })
+                .onSet(value => this.write('brightness', levels[levels.length === 2
+                    ? (value <= 50 ? 0 : 1) : Math.max(0, Math.round(value * levels.length / 100) - 1)]));
+            return service;
+        }
         const levels = this.features.brightnessLevels || [0, 1, 2];
         let lastIndex = levels.length - 1;
         const read = async () => {
@@ -156,6 +181,7 @@ class Miot extends Base {
 
     purifierServices() {
         const C = this.C;
+        const MODES = this.modes;
         const service = new this.Service.AirPurifier(this.name);
         const active = service.getCharacteristic(C.Active)
             .onGet(async () => await this.read('power') ? C.Active.ACTIVE : C.Active.INACTIVE)

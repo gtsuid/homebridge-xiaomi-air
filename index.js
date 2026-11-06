@@ -10,6 +10,9 @@ const XiaomiAirPurifier4 = require('./devices/XiaomiAirPurifier4');
 const XiaomiAirPurifier4Lite = require('./devices/XiaomiAirPurifier4Lite');
 const XiaomiAirPurifier4Pro = require('./devices/XiaomiAirPurifier4Pro');
 const XiaomiAirPurifier4Compact = require('./devices/XiaomiAirPurifier4Compact');
+const XiaomiAirPurifier5 = require('./devices/XiaomiAirPurifier5');
+const XiaomiAirPurifier5Pro = require('./devices/XiaomiAirPurifier5Pro');
+const XiaomiAirPurifier6Pro = require('./devices/XiaomiAirPurifier6Pro');
 const XiaomiAirPurifier6 = require('./devices/XiaomiAirPurifier6');
 
 var packageFile = require("./package.json");
@@ -94,8 +97,15 @@ XiaomiAirPlatform.prototype = {
                     myAccessories.push(...new XiaomiAirPurifier4Pro(this, deviceCfg));
                 } else if (deviceCfg['type'] === 'XiaomiAirPurifier4Compact' || deviceCfg['type'] === 'MiAirPurifier4Compact') {
                     myAccessories.push(...new XiaomiAirPurifier4Compact(this, deviceCfg));
+                } else if (deviceCfg['type'] === 'XiaomiAirPurifier5' || deviceCfg['type'] === 'MiAirPurifier5') {
+                    myAccessories.push(...new XiaomiAirPurifier5(this, deviceCfg));
+                } else if (deviceCfg['type'] === 'XiaomiAirPurifier5Pro' || deviceCfg['type'] === 'MiAirPurifier5Pro') {
+                    myAccessories.push(...new XiaomiAirPurifier5Pro(this, deviceCfg));
                 } else if (deviceCfg['type'] === 'XiaomiDehumidifierLite') {
                     myAccessories.push(...new XiaomiDehumidifierLite(this, deviceCfg));
+                } else if (deviceCfg['type'] === 'XiaomiAirPurifier6Pro' || deviceCfg['type'] === 'MiAirPurifier6Pro') {
+                    myAccessories.push(...new XiaomiAirPurifier6Pro(this, deviceCfg));
+
                 } else if (deviceCfg['type'] === 'XiaomiAirPurifier6' || deviceCfg['type'] === 'MiAirPurifier6') {
                     myAccessories.push(...new XiaomiAirPurifier6(this, deviceCfg));
                 } else {

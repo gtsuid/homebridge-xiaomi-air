@@ -1,8 +1,8 @@
 # homebridge-xiaomi-air
 
-Xiaomi air purifier and dehumidifier plugin for Homebridge.
+Homebridge plugin for Xiaomi/Mijia air purifier and dehumidifier.
 
-**Note:** I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to **[issues]()**.
+**Note:** I only own one of the listed devices, so not all have been tested. If you encounter any bugs, please report them via **[issues](https://github.com/gtsuid/homebridge-xiaomi-air/issues)**.
 
 ## Supported Devices
 ### Air Purifier
@@ -19,12 +19,19 @@ Xiaomi air purifier and dehumidifier plugin for Homebridge.
 | 9 | Xiaomi Air Purifier 4 Lite | 4 | `zhimi.airpurifier.rma1`, `zhimi.airpurifier.rma2`, `zhimi.airp.rmb1` |
 | 10 | Xiaomi Air Purifier 4 Pro | 4 | `zhimi.airp.va2`, `zhimi.airp.vb4` |
 | 11 | Xiaomi Air Purifier 4 Compact | 4 | `zhimi.airp.cpa4`, `xiaomi.airp.cpa4` |
-| 12 | Xiaomi Air Purifier 6 | 6 | `xiaomi.airp.mc6` |
+| 12 | Xiaomi Air Purifier 5 | 5 | `xiaomi.airp.mp5` |
+| 13 | Xiaomi Air Purifier 5 Pro | 5 | `xiaomi.airp.va5` |
+| 14 | Xiaomi Air Purifier 6 | 6 | `xiaomi.airp.mc6`, `xiaomi.airp.ma6` |
+| 15 | Xiaomi Air Purifier 6 Pro | 6 | `xiaomi.airp.va6` |
 
 ### Dehumidifier
 | # | Device | Model IDs |
 |:-:|:-|:-|
 | 1 | Xiaomi Smart Dehumidifier Lite | `xiaomi.derh.lite` |
+
+## Prerequisites
+1. Install Homebridge 2.x.x, please follow it's [README](https://github.com/homebridge/homebridge/blob/latest/README.md).
+2. Get device 32 digits token
 
 ## Configuration
 You can config the plugin via Homebridge UI or manually edit the ``JSON Config``.

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.2
+- Add Xiaomi Air Purifier 5 and 5 Pro support
+- Add Xiaomi Air Purifier 6 Pro and 6 (variant) support
+- Bug fixes on Homebridge UI config
+
 ## 0.0.1
 - Update miio to 0.15.6.
 - Add native Homebridge UI settings

@@ -67,10 +67,40 @@
                     "firmwareRevision": "1.4.3"
                 },
                 {
+                    "type": "XiaomiAirPurifier5",
+                    "ip": "192.168.1.105",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 5",
+                    "silentModeSwitchName": "Purifier 5 Sleep",
+                    "airQualityName": "Purifier 5 Air Quality"
+                },
+                {
+                    "type": "XiaomiAirPurifier5Pro",
+                    "ip": "192.168.1.125",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 5 Pro",
+                    "silentModeSwitchName": "Purifier 5 Pro Sleep",
+                    "airQualityName": "Purifier 5 Pro Air Quality"
+                },
+                {
                     "type": "XiaomiDehumidifierLite",
                     "ip": "192.168.1.110",
                     "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
                     "dehumidifierName": "Dehumidifier"
+                },
+                {
+                    "type": "XiaomiAirPurifier6",
+                    "ip": "192.168.1.106",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 6",
+                    "airQualityName": "Air Purifier 6 Air Quality"
+                },
+                {
+                    "type": "XiaomiAirPurifier6Pro",
+                    "ip": "192.168.1.126",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airPurifierName": "Air Purifier 6 Pro",
+                    "airQualityName": "Air Purifier 6 Pro Air Quality"
                 }
             ]
         }
