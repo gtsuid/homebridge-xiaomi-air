@@ -1,6 +1,6 @@
 {
   "name": "homebridge-xiaomi-air",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Xiaomi air purifier plugin for Homebridge",
   "keywords": [
     "homebridge-plugin",
@@ -24,13 +24,7 @@
     "node": "^22.12.0 || ^24.0.0 || ^26.0.0",
     "homebridge": "^2.0.0"
   },
-  "dependencies": {
-    "miio": "^0.15.6"
-  },
   "main": "index.js",
-  "devDependencies": {
-    "homebridge": "^2.5.0"
-  },
   "scripts": {
     "test": "node --test"
   },

@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.0.3
+
 ## 0.0.2
 - Add Xiaomi Air Purifier 5 and 5 Pro support
 - Add Xiaomi Air Purifier 6 Pro and 6 (variant) support

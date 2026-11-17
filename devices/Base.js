@@ -1,8 +1,7 @@
-const miio = require('miio');
+const lan = require('./LanDevice');
 const packageVersion = require('../package.json').version;
 
-// Keep the existing raw command interface while connecting through miio 0.15.
-class MiioDevice {
+class DeviceConnection {
     constructor(options, api) {
         this.options = options;
         this.connection = null;
@@ -19,9 +18,8 @@ class MiioDevice {
             throw new Error('Device connection is closed');
         }
         if (!this.connection) {
-            this.connection = miio.device(this.options).then(device => {
-                // miio uses abstract-things events, which provide on() but not once().
-                device.on('thing:destroyed', () => {
+            this.connection = lan.device(this.options).then(device => {
+                device.on('close', () => {
                     this.connection = null;
                 });
                 return device;
@@ -73,7 +71,7 @@ Base.prototype.init = function(platform, config) {
         : typeof revision === 'number' && Number.isFinite(revision)
             ? String(revision)
             : packageVersion;
-    this.device = new MiioDevice({
+    this.device = new DeviceConnection({
         address: config.ip,
         token: config.token
     }, platform.api);

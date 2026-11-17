@@ -1,4 +1,4 @@
-const Base = require('./Base');
+const MiotDevice = require('./MiotDevice');
 
 // https://miot-spec.org/miot-spec-v2/instance?type=urn:miot-spec-v2:device:dehumidifier:0000A02D:xiaomi-lite:1
 const MODEL = 'xiaomi.derh.lite';
@@ -12,11 +12,16 @@ const PROPERTIES = {
 };
 const WRITABLE = new Set(['power', 'mode', 'targetHumidity', 'buzzer', 'led', 'brightness', 'childLock']);
 
-class XiaomiDehumidifierLite extends Base {
+const FAMILY = 'dehumidifier-lite';
+const PROFILES = {
+    [MODEL]: { family: FAMILY, properties: PROPERTIES, fractionalProperties: ['temperature'] }
+};
+
+class XiaomiDehumidifierLite extends MiotDevice {
     constructor(platform, config) {
-        super();
-        if (config.model && config.model !== MODEL) throw new Error(`Unsupported dehumidifier model: ${config.model}`);
-        this.init(platform, config);
+        super(platform, config, {
+            family: FAMILY, profiles: PROFILES, name: 'Dehumidifier', writable: WRITABLE
+        });
         this.Service = platform.Service;
         this.C = platform.Characteristic;
         this.name = config.dehumidifierName || 'Xiaomi Smart Dehumidifier Lite';
@@ -70,38 +75,6 @@ class XiaomiDehumidifierLite extends Base {
             .setCharacteristic(this.C.Model, MODEL)
             .setCharacteristic(this.C.SerialNumber, this.serialNumber)
             .setCharacteristic(this.C.FirmwareRevision, this.firmwareRevision);
-    }
-
-    async checkModel() {
-        const model = await this.device.getModel();
-        if (model !== MODEL) throw new Error(`Unsupported or unknown dehumidifier model: ${model || 'unknown'}`);
-    }
-
-    async read(key) {
-        await this.checkModel();
-        const [siid, piid, type, min, max] = PROPERTIES[key];
-        const response = await this.device.call('get_properties', [{ did: key, siid, piid }]);
-        const item = Array.isArray(response) && response.find(entry => entry && entry.siid === siid && entry.piid === piid);
-        if (!item || item.code !== 0 || typeof item.value !== type || (type === 'number' &&
-            (!Number.isFinite(item.value) || (key !== 'temperature' && !Number.isInteger(item.value)) || item.value < min || item.value > max))) {
-            throw new Error(`Dehumidifier property ${key} unavailable`);
-        }
-        return item.value;
-    }
-
-    async write(key, value) {
-        await this.checkModel();
-        const property = PROPERTIES[key];
-        if (!property || !WRITABLE.has(key)) throw new Error(`Dehumidifier property ${key} is not writable`);
-        const [siid, piid, type, min, max] = property;
-        if (typeof value !== type || (type === 'number' && (!Number.isInteger(value) || value < min || value > max))) {
-            throw new Error(`Invalid dehumidifier value for ${key}`);
-        }
-        const response = await this.device.call('set_properties', [{ did: key, siid, piid, value }]);
-        if (!Array.isArray(response) || response.length !== 1 || !response[0] || response[0].code !== 0 ||
-            response[0].siid !== siid || response[0].piid !== piid) {
-            throw new Error(`Dehumidifier rejected property ${key}`);
-        }
     }
 
     faultCharacteristic(service) {

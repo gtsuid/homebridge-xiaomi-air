@@ -1,21 +1,19 @@
-const Base = require('./Base');
+const MiotDevice = require('./MiotDevice');
 
 const MODES = { AUTO: 0, SLEEP: 1, FAVORITE: 2, FAN: 3 };
 const WRITABLE = new Set(['power', 'mode', 'favoriteLevel', 'favoriteRpm', 'buzzer', 'childLock', 'brightness', 'anion', 'uv', 'screen']);
 
-class Miot extends Base {
+class Miot extends MiotDevice {
     constructor(platform, config, definition) {
-        super();
-        const { family, profiles, name, features } = definition;
-        if (config.model && profiles[config.model]?.family !== family) {
-            throw new Error(`Model ${config.model} is not supported by ${name}`);
-        }
-        this.init(platform, config);
-        this.family = family;
-        this.profiles = profiles;
-        this.displayName = name;
+        const { family, profiles, name, features, modes = MODES } = definition;
+        super(platform, config, {
+            family, profiles, name, writable: WRITABLE,
+            readModes: Object.values(modes),
+            // Fan mode can be read, but the HomeKit Manual selector writes Favorite.
+            writeModes: [modes.AUTO, modes.SLEEP, modes.FAVORITE]
+        });
         this.features = features;
-        this.modes = definition.modes || MODES;
+        this.modes = modes;
         this.name = config.airPurifierName || name;
         this.Service = platform.Service;
         this.C = platform.Characteristic;
@@ -77,52 +75,6 @@ class Miot extends Base {
             .setCharacteristic(this.C.Model, this.config.model || this.displayName)
             .setCharacteristic(this.C.SerialNumber, this.serialNumber)
             .setCharacteristic(this.C.FirmwareRevision, this.firmwareRevision);
-    }
-
-    async getProfile() {
-        // Resolve the actual LAN model before choosing any read or write IDs.
-        const model = await this.device.getModel();
-        const profile = this.profiles[model];
-        if (!profile || profile.family !== this.family || (this.config.model && this.config.model !== model)) {
-            throw new Error(`Unsupported or mismatched ${this.displayName} model: ${model || 'unknown'}`);
-        }
-        return profile;
-    }
-
-    async read(key) {
-        const profile = await this.getProfile();
-        const property = profile.properties[key];
-        if (!property) throw new Error(`${this.displayName} does not expose ${key}`);
-        const [siid, piid, type, min, max] = property;
-        const response = await this.device.call('get_properties', [{ did: key, siid, piid }]);
-        const item = Array.isArray(response) && response.find(entry => entry && entry.siid === siid && entry.piid === piid);
-        const fractional = profile.fractionalProperties.includes(key);
-        if (!item || item.code !== 0 || typeof item.value !== type || (type === 'number' &&
-            (!Number.isFinite(item.value) || (!fractional && !Number.isInteger(item.value)) || item.value < min || item.value > max))) {
-            throw new Error(`${this.displayName} property ${key} unavailable`);
-        }
-        if (key === 'mode' && !Object.values(this.modes).includes(item.value)) {
-            throw new Error(`Unknown ${this.displayName} mode: ${item.value}`);
-        }
-        return item.value;
-    }
-
-    async write(key, value) {
-        const profile = await this.getProfile();
-        const property = profile.properties[key];
-        if (!property || !WRITABLE.has(key)) throw new Error(`${this.displayName} property ${key} is not writable`);
-        const [siid, piid, type, min, max] = property;
-        // Fan mode can be read, but the HomeKit Manual selector writes Favorite.
-        if (typeof value !== type || (type === 'number' &&
-            (!Number.isInteger(value) || value < min || value > max)) ||
-            (key === 'mode' && ![this.modes.AUTO, this.modes.SLEEP, this.modes.FAVORITE].includes(value))) {
-            throw new Error(`Invalid ${this.displayName} value for ${key}`);
-        }
-        const response = await this.device.call('set_properties', [{ did: key, siid, piid, value }]);
-        if (!Array.isArray(response) || response.length !== 1 || !response[0] || response[0].code !== 0 ||
-            response[0].siid !== siid || response[0].piid !== piid) {
-            throw new Error(`${this.displayName} rejected property ${key}`);
-        }
     }
 
     switchService(name, key) {
