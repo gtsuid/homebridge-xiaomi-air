@@ -1,5 +1,7 @@
 # homebridge-xiaomi-air
 
+[![npm version](https://img.shields.io/npm/v/homebridge-xiaomi-air)](https://www.npmjs.com/package/homebridge-xiaomi-air)
+
 Homebridge plugin for Xiaomi/Mijia air treatment products: air purifier, air conditioner, and dehumidifier.
 
 **Note:** I only own few of the listed devices, so not all have been tested. If you encounter any bugs, please report them via **[issues](https://github.com/gtsuid/homebridge-xiaomi-air/issues)**.

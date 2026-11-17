@@ -59,9 +59,14 @@ class MiotDevice extends Base {
         }
         const [siid, piid] = property;
         const response = await this.device.call('set_properties', [{ did: key, siid, piid, value }]);
-        if (!Array.isArray(response) || response.length !== 1 || !response[0] || response[0].code !== 0 ||
-            response[0].siid !== siid || response[0].piid !== piid) {
+        const item = Array.isArray(response) && response.length === 1 ? response[0] : undefined;
+        if (!item || item.siid !== siid || item.piid !== piid) {
             throw new Error(`${this.displayName} rejected property ${key}`);
+        }
+        if (item.code !== 0) {
+            const error = new Error(`${this.displayName} rejected property ${key}`);
+            error.miotCode = item.code;
+            throw error;
         }
     }
 }

@@ -9,6 +9,7 @@ const PROPERTIES = {
     mode: [2, 2, 'number', 2, 4],
     targetTemperature: [2, 4, 'number', 16, 31],
     fanLevel: [3, 2, 'number', 0, 7],
+    fanPercent: [10, 1, 'number', 0, 101],
     horizontalSwing: [3, 3, 'boolean'],
     verticalSwing: [3, 4, 'boolean'],
     temperature: [4, 7, 'number', -50, 150],
@@ -28,12 +29,13 @@ class XiaomiAirConditionerProEco1Pk extends MiotDevice {
                     fractionalProperties: ['temperature', 'targetTemperature', 'compressorFrequency']
                 }
             },
-            writable: new Set(['power', 'mode', 'targetTemperature', 'fanLevel', 'horizontalSwing', 'verticalSwing']),
+            writable: new Set(['power', 'mode', 'targetTemperature', 'fanLevel', 'fanPercent', 'horizontalSwing', 'verticalSwing']),
             readModes: Object.values(MODE),
             writeModes: [MODE.COOL]
         });
         this.Service = platform.Service;
         this.C = platform.Characteristic;
+        this.fanSpeedProperty = 'fanLevel';
         return [{
             name,
             uuid_base: `${config.ip}:air-conditioner`,
@@ -59,6 +61,33 @@ class XiaomiAirConditionerProEco1Pk extends MiotDevice {
             ? await this.read('temperature') > await this.read('targetTemperature')
             : frequency > 0;
         return cooling ? state.COOLING : state.IDLE;
+    }
+
+    async readFanSpeed() {
+        const preferred = this.fanSpeedProperty;
+        const value = await this.read(preferred).catch(() => undefined);
+        if (value !== undefined) return { property: preferred, value };
+
+        const property = preferred === 'fanLevel' ? 'fanPercent' : 'fanLevel';
+        return { property, value: await this.read(property) };
+    }
+
+    async writeFanSpeed(percent) {
+        const { property } = await this.readFanSpeed();
+        if (property === 'fanLevel') {
+            const level = percent === 0 ? 0 : Math.max(1, Math.round(percent * 7 / 100));
+            try {
+                await this.write('fanLevel', level);
+                this.fanSpeedProperty = 'fanLevel';
+                return;
+            } catch (error) {
+                // Retry via fan-percent only when the device explicitly rejects the property.
+                if (![-4002, -4003, -4005].includes(error.miotCode)) throw error;
+                await this.read('fanPercent');
+            }
+        }
+        await this.write('fanPercent', Math.round(percent));
+        this.fanSpeedProperty = 'fanPercent';
     }
 
     heaterCooler(name) {
@@ -88,8 +117,11 @@ class XiaomiAirConditionerProEco1Pk extends MiotDevice {
             .onGet(() => this.read('targetTemperature'))
             .onSet(value => this.write('targetTemperature', Math.round(value * 2) / 2));
         service.getCharacteristic(C.RotationSpeed)
-            .onGet(async () => Math.round(await this.read('fanLevel') * 100 / 7))
-            .onSet(value => this.write('fanLevel', value === 0 ? 0 : Math.max(1, Math.round(value * 7 / 100))));
+            .onGet(async () => {
+                const { property, value } = await this.readFanSpeed();
+                return property === 'fanLevel' ? Math.round(value * 100 / 7) : Math.min(value, 100);
+            })
+            .onSet(value => this.writeFanSpeed(value));
         service.getCharacteristic(C.SwingMode)
             .onGet(async () => await this.read('horizontalSwing') || await this.read('verticalSwing')
                 ? C.SwingMode.SWING_ENABLED : C.SwingMode.SWING_DISABLED)
