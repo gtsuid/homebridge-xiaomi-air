@@ -1,4 +1,4 @@
-const Base = require('./Base');
+const Base = require('../lib/Base');
 
 const inherits = require('util').inherits;
 

@@ -1,4 +1,4 @@
-const Miot = require('./Miot');
+const MiotAirPurifier = require('../lib/MiotAirPurifier');
 
 // MIoT protocol facts checked against published model schemas at miot-spec.org.
 // Reference: https://github.com/rytilahti/python-miio/blob/master/miio/integrations/zhimi/airpurifier/airpurifier_miot.py
@@ -44,7 +44,7 @@ const NAMES = { '4': 'Xiaomi Air Purifier 4', lite: 'Xiaomi Air Purifier 4 Lite'
 
 module.exports = function XiaomiAirPurifier4(platform, config, family = '4') {
     if (!NAMES[family]) throw new Error(`Unknown Air Purifier 4 family: ${family}`);
-    return new Miot(platform, config, {
+    return new MiotAirPurifier(platform, config, {
         family, profiles: PROFILES, name: NAMES[family],
         features: { environment: family !== 'compact', ionizer: family === '4' || family === 'pro' }
     });

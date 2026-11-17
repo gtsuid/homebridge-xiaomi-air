@@ -1,4 +1,4 @@
-const Miot = require('./Miot');
+const MiotAirPurifier = require('../lib/MiotAirPurifier');
 
 // Published MIoT schemas:
 // https://miot-spec.org/miot-spec-v2/instance?type=urn:miot-spec-v2:device:air-purifier:0000A007:xiaomi-ma6:1:0000D050
@@ -35,7 +35,7 @@ const PROFILES = {
 
 module.exports = function XiaomiAirPurifier6(platform, config, family = '6') {
     if (!['6', 'pro'].includes(family)) throw new Error(`Unknown Air Purifier 6 family: ${family}`);
-    return new Miot(platform, config, {
+    return new MiotAirPurifier(platform, config, {
         family, profiles: PROFILES,
         name: family === 'pro' ? 'Xiaomi Air Purifier 6 Pro' : 'Xiaomi Air Purifier 6',
         modes: { AUTO: 0, SLEEP: 3, FAVORITE: 5 },

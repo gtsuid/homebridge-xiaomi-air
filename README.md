@@ -8,8 +8,8 @@ Homebridge plugin for Xiaomi/Mijia air treatment products: air purifier, air con
 
 ## Supported Devices
 ### Air Purifier
-| # | Device | Series | Model IDs |
-|:-:|:-|:-|:-|
+| No. | Device | Series | Model IDs |
+|:-:|---|:-:|---|
 | 1 | Xiaomi Air Purifier | 1 | `zhimi.airpurifier.v1` |
 | 2 | Xiaomi Air Purifier Pro | 1 | `zhimi.airpurifier.v6`, `zhimi.airpurifier.v7` |
 | 3 | Xiaomi Air Purifier 2 | 2 | `zhimi.airpurifier.m1`, `zhimi.airpurifier.m2` |
@@ -27,13 +27,13 @@ Homebridge plugin for Xiaomi/Mijia air treatment products: air purifier, air con
 | 15 | Xiaomi Air Purifier 6 Pro | 6 | `xiaomi.airp.va6` |
 
 ### Air Conditioner
-| # | Device | Model IDs |
-|:-:|:-|:-|
+| No. | Device | Model IDs |
+|:-:|---|---|
 | 1 | Mijia Air Conditioner Pro Eco 5-Star 1.0 PK Inverter | `xiaomi.airc.ra4r00` |
 
 ### Dehumidifier
-| # | Device | Model IDs |
-|:-:|:-|:-|
+| No. | Device | Model IDs |
+|:-:|---|---|
 | 1 | Xiaomi Smart Dehumidifier Lite | `xiaomi.derh.lite` |
 
 ## Prerequisites

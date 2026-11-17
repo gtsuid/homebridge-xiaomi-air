@@ -1,4 +1,4 @@
-const Miot = require('./Miot');
+const MiotAirPurifier = require('../lib/MiotAirPurifier');
 
 // Protocol facts from published MIoT schemas (zhimi-ma4:2, zhimi-mb3:2,
 // zhimi-mb3a:1, zhimi-mb4:1, zhimi-mb4a:1). Saved schema sources are in
@@ -31,7 +31,7 @@ const NAMES = { '3': 'Xiaomi Air Purifier 3', '3H': 'Xiaomi Air Purifier 3H', '3
 
 module.exports = function XiaomiAirPurifier3(platform, config, family = '3') {
     if (!NAMES[family]) throw new Error(`Unknown Air Purifier 3 family: ${family}`);
-    return new Miot(platform, config, {
+    return new MiotAirPurifier(platform, config, {
         family, profiles: PROFILES, name: NAMES[family],
         features: {
             environment: family !== '3C', ionizer: false,

@@ -1,9 +1,12 @@
 # Changelog
 
+## 0.0.4
+- Bug fix and under the hood improvement
+
 ## 0.0.3
 - Migrate to MiOT and remove miio dependency
 - Add support for air conditioner (``HeaterCooler``)
-- Add Mijia Air Conditioner Pro 1 PK (Indonesian market) support
+- Add Mijia Air Conditioner Pro 1 PK (🇮🇩) support
 
 ## 0.0.2
 - Add Xiaomi Air Purifier 5 and 5 Pro support

@@ -1,6 +1,6 @@
 {
   "name": "homebridge-xiaomi-air",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Xiaomi air purifier plugin for Homebridge",
   "keywords": [
     "homebridge-plugin",
@@ -9,7 +9,8 @@
     "mi",
     "airpurifier",
     "dehumidifier",
-    "smart-home"
+    "smart-home",
+    "air-conditioner"
   ],
   "author": "Gayuh Tri Satria",
   "homepage": "https://github.com/gtsuid/homebridge-xiaomi-air#readme",
@@ -31,6 +32,7 @@
   "files": [
     "index.js",
     "devices/",
+    "lib/",
     "config.schema.json"
   ]
 }
