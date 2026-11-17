@@ -1,3 +1,4 @@
+const XiaomiAirConditionerProEco1Pk = require('./devices/XiaomiAirConditionerProEco1Pk');
 const XiaomiDehumidifierLite = require('./devices/XiaomiDehumidifierLite');
 const XiaomiAirPurifier = require('./devices/XiaomiAirPurifier');
 const XiaomiAirPurifierPro = require('./devices/XiaomiAirPurifierPro');
@@ -101,6 +102,8 @@ XiaomiAirPlatform.prototype = {
                     myAccessories.push(...new XiaomiAirPurifier5(this, deviceCfg));
                 } else if (deviceCfg['type'] === 'XiaomiAirPurifier5Pro' || deviceCfg['type'] === 'MiAirPurifier5Pro') {
                     myAccessories.push(...new XiaomiAirPurifier5Pro(this, deviceCfg));
+                } else if (deviceCfg['type'] === 'XiaomiAirConditionerProEco1Pk') {
+                    myAccessories.push(...new XiaomiAirConditionerProEco1Pk(this, deviceCfg));
                 } else if (deviceCfg['type'] === 'XiaomiDehumidifierLite') {
                     myAccessories.push(...new XiaomiDehumidifierLite(this, deviceCfg));
                 } else if (deviceCfg['type'] === 'XiaomiAirPurifier6Pro' || deviceCfg['type'] === 'MiAirPurifier6Pro') {

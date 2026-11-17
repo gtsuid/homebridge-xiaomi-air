@@ -53,7 +53,8 @@ class MiotDevice extends Base {
         const profile = await this.getProfile();
         const property = profile.properties[key];
         if (!property || !this.writable.has(key)) throw new Error(`${this.displayName} property ${key} is not writable`);
-        if (!validValue(value, property) || (key === 'mode' && this.writeModes && !this.writeModes.includes(value))) {
+        if (!validValue(value, property, profile.fractionalProperties.includes(key)) ||
+            (key === 'mode' && this.writeModes && !this.writeModes.includes(value))) {
             throw new Error(`Invalid ${this.displayName} value for ${key}`);
         }
         const [siid, piid] = property;

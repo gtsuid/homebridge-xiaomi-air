@@ -1,8 +1,8 @@
 # homebridge-xiaomi-air
 
-Homebridge plugin for Xiaomi/Mijia air purifier and dehumidifier.
+Homebridge plugin for Xiaomi/Mijia air treatment products: air purifier, air conditioner, and dehumidifier.
 
-**Note:** I only own one of the listed devices, so not all have been tested. If you encounter any bugs, please report them via **[issues](https://github.com/gtsuid/homebridge-xiaomi-air/issues)**.
+**Note:** I only own few of the listed devices, so not all have been tested. If you encounter any bugs, please report them via **[issues](https://github.com/gtsuid/homebridge-xiaomi-air/issues)**.
 
 ## Supported Devices
 ### Air Purifier
@@ -24,6 +24,11 @@ Homebridge plugin for Xiaomi/Mijia air purifier and dehumidifier.
 | 14 | Xiaomi Air Purifier 6 | 6 | `xiaomi.airp.mc6`, `xiaomi.airp.ma6` |
 | 15 | Xiaomi Air Purifier 6 Pro | 6 | `xiaomi.airp.va6` |
 
+### Air Conditioner
+| # | Device | Model IDs |
+|:-:|:-|:-|
+| 1 | Mijia Air Conditioner Pro Eco 5-Star 1.0 PK Inverter | `xiaomi.airc.ra4r00` |
+
 ### Dehumidifier
 | # | Device | Model IDs |
 |:-:|:-|:-|
@@ -40,6 +45,7 @@ For configuration example, please refer to file ``sampleConfig.json``.
 
 ## Credits
 - [Nick Farina](https://x.com/nfarina), the original creator of [Homebridge](https://github.com/homebridge/homebridge)
+- [Xiaomi MIOT Spec](https://home.miot-spec.com) for the detailed tech specs
 - [YinHangCode](https://github.com/YinHangCode), the author of [homebridge-mi-airpurifier](https://github.com/YinHangCode/homebridge-mi-airpurifier)
 - [Teemu R.](https://github.com/rytilahti), the author of [python-miio](https://github.com/rytilahti/python-miio)
 - [Paweł Zubrycki](https://github.com/Aulos), the author of [xiaomi-miio-air-devices](https://github.com/Aulos/xiaomi-miio-air-devices)

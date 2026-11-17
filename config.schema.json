@@ -3,7 +3,7 @@
   "pluginType": "platform",
   "singular": true,
   "strictValidation": false,
-  "headerDisplay": "Add a device, then choose its model. Supports Xiaomi air purifiers and dehumidifier. Each device needs its local address and miio token.",
+  "headerDisplay": "Add a device, then choose its model. Supports Xiaomi air purifiers, dehumidifiers, and air conditioners. Each device needs its local address and miio token.",
   "footerDisplay": "Save your settings and restart Homebridge to apply changes.",
   "schema": {
     "type": "object",
@@ -191,6 +191,12 @@
                   "title": "Xiaomi Smart Dehumidifier Lite (xiaomi.derh.lite)",
                   "enum": [
                     "XiaomiDehumidifierLite"
+                  ]
+                },
+                {
+                  "title": "Mijia Air Conditioner Pro Eco 1 PK (xiaomi.airc.ra4r00)",
+                  "enum": [
+                    "XiaomiAirConditionerProEco1Pk"
                   ]
                 }
               ],
@@ -432,6 +438,13 @@
               "condition": {
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.waterTankFullSensorDisable !== true);"
               }
+            },
+            "airConditionerName": {
+              "title": "Air conditioner name",
+              "type": "string",
+              "condition": {
+                "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && d.type === 'XiaomiAirConditionerProEco1Pk';"
+              }
             }
           }
         }
@@ -443,7 +456,7 @@
     {
       "key": "deviceCfgs",
       "type": "tabarray",
-      "title": "{{ value.type === 'XiaomiDehumidifierLite' ? (value.dehumidifierName || 'Dehumidifier') : (value.type ? (value.airPurifierName || 'Air purifier') : 'Device') }}",
+      "title": "{{ value.type === 'XiaomiAirConditionerProEco1Pk' ? (value.airConditionerName || 'Air conditioner') : value.type === 'XiaomiDehumidifierLite' ? (value.dehumidifierName || 'Dehumidifier') : (value.type ? (value.airPurifierName || 'Air purifier') : 'Device') }}",
       "expandable": true,
       "expanded": true,
       "draggable": true,
@@ -454,6 +467,12 @@
         {
           "key": "deviceCfgs[].token",
           "type": "password"
+        },
+        {
+          "key": "deviceCfgs[].airConditionerName",
+          "condition": {
+            "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && d.type === 'XiaomiAirConditionerProEco1Pk';"
+          }
         },
         {
           "key": "deviceCfgs[].airPurifierName",
@@ -505,7 +524,10 @@
                 "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && [\"XiaomiDehumidifierLite\"].indexOf(d.type) !== -1 && (d.clothesDryingSwitchDisable !== true);"
               }
             }
-          ]
+          ],
+          "condition": {
+            "functionBody": "var d = model.deviceCfgs && model.deviceCfgs[arrayIndices[0]]; return !!d && d.type !== 'XiaomiAirConditionerProEco1Pk';"
+          }
         },
         {
           "key": "deviceCfgs[]",

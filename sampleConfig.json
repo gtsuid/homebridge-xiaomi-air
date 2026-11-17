@@ -101,6 +101,12 @@
                     "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
                     "airPurifierName": "Air Purifier 6 Pro",
                     "airQualityName": "Air Purifier 6 Pro Air Quality"
+                },
+                {
+                    "type": "XiaomiAirConditionerProEco1Pk",
+                    "ip": "192.168.1.140",
+                    "token": "YOUR_32_CHARACTER_DEVICE_TOKEN",
+                    "airConditionerName": "Mijia Air Conditioner"
                 }
             ]
         }
